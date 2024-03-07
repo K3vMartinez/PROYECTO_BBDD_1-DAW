@@ -1,0 +1,5 @@
+-- Detalle con todo el contenido de la cesta con más valor (subconsulta)
+Select productos.nombre, cesta.ID from productos,detalle_cesta, cesta, contienen
+where productos.referencia = contienen.ref_producto and contienen.numero_linea = detalle_cesta.numero_linea and detalle_cesta.ID_cesta = cesta.ID
+and cesta.valor_total = (Select max(valor_total) from cesta)
+group by nombre;

@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION valor_total_recibido(
+dnisocio varchar2,
+fechainicio date,
+fechafin date)
+RETURN NUMBER 
+AS 
+total NUMBER(4,2);
+BEGIN
+SELECT SUM(CESTA.VALOR_TOTAL) into total FROM RECOGEN, CESTA WHERE RECOGEN.ID_CESTA = CESTA.ID AND  UPPER(RECOGEN.DNI_SOCIO )=UPPER(dnisocio)   AND RECOGEN.FECHA_RECOGIDA BETWEEN fechainicio AND fechafin;
+RETURN total;
+END valor_total_recibido;

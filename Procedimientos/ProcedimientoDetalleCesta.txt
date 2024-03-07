@@ -1,0 +1,23 @@
+create or replace PROCEDURE DETALLECESTA (tipoCesta VARCHAR2)
+AS
+CURSOR CDetalle is
+Select distinct PRODUCTOS.NOMBRE, DETALLE_CESTA.CANTIDAD, PRODUCTOS.MEDIDA
+from PRODUCTOS, DETALLE_CESTA, CONTIENEN
+where PRODUCTOS.REFERENCIA = CONTIENEN.REF_PRODUCTO and CONTIENEN.NUMERO_LINEA = DETALLE_CESTA.NUMERO_LINEA and UPPER(DETALLE_CESTA.ID_CESTA) = UPPER(tipoCesta);
+
+datos_cesta CDetalle%rowtype;
+
+BEGIN
+DBMS_OUTPUT.PUT_LINE('DETALLE DE LA CESTA: '||tipoCesta);
+DBMS_OUTPUT.PUT_LINE('------------------------------------------------');
+DBMS_OUTPUT.PUT_LINE('Producto                Cantidad         Medida');
+DBMS_OUTPUT.PUT_LINE('------------------------------------------------');
+
+OPEN CDetalle;
+FETCH CDetalle into datos_cesta;
+While CDetalle%found loop
+DBMS_OUTPUT.PUT_LINE(RPAD(datos_cesta.nombre,20)||LPAD(datos_cesta.cantidad,7)||LPAD(datos_cesta.medida,17));
+FETCH CDetalle into datos_cesta;
+END LOOP;
+CLOSE CDetalle;
+END DETALLECESTA;

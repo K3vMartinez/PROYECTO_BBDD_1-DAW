@@ -1,0 +1,5 @@
+-- Listado de voluntarios (Nombre, apellidos, DNI) con la cantidad de cestas que ha preparado de cada tipo indicado entre dos fechas(en un periodo)
+Select concat(voluntarios.nombre,' ',voluntarios.apellidos) as NombreCompleto, voluntarios.DNI, preparan.ID_cesta as TipoCesta, preparan.cantidad
+from voluntarios, preparan 
+where voluntarios.DNI = preparan.DNI_voluntario 
+and fecha_preparacion between '2022-01-01' and '2022-02-28';

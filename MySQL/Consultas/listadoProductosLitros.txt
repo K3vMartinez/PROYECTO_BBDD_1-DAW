@@ -1,0 +1,5 @@
+-- Listado de productos y ordenado por el campo de Valor de mas a menos de aquellos productos que se midan en litros
+Select nombre, valor, medida
+from productos
+where medida = 'L'
+order by valor desc;

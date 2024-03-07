@@ -1,0 +1,53 @@
+-- Actualizar el campo del valor de la cesta (con la suma de todos los valores de los productos)
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'A') 
+where Cesta.ID = 'A';
+
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'B') 
+where Cesta.ID = 'B';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'C') 
+where Cesta.ID = 'C';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'D') 
+where Cesta.ID = 'D';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'E') 
+where Cesta.ID = 'E';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'F') 
+where Cesta.ID = 'F';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'G') 
+where Cesta.ID = 'G';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'H') 
+where Cesta.ID = 'H';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'I') 
+where Cesta.ID = 'I';
+
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = 'J') 
+where Cesta.ID = 'J';
+

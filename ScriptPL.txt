@@ -1,0 +1,328 @@
+Create table SOCIOS (
+DNI varchar2(9) PRIMARY KEY,
+nombre varchar2(20),
+apellidos varchar2(50),
+direccion varchar2(50),
+telefono varchar2(9),
+fecha_nacimiento date,
+ingresos number(4),
+cantidad_miembros_familia number(2),
+ayuda varchar2(5) check (ayuda in ('1','2','3'))
+);
+Create table VOLUNTARIOS (
+DNI varchar2(9) PRIMARY KEY,
+nombre varchar2(20),
+apellidos varchar2(50),
+direccion varchar2(50),
+telefono varchar2(9),
+fecha_nacimiento date,
+puntos number(4)
+);
+Create table CESTA (
+ID varchar2(1) PRIMARY KEY,
+valor_total number(4,2),
+stock number(4)
+);
+Create table REGALO (
+codigo varchar2(4) PRIMARY KEY,
+nombre varchar2(20),
+descripcion varchar2(50),
+valor number(4)
+);
+Create table DETALLE_CESTA(
+numero_linea number(3),
+ID_cesta varchar2(1),
+cantidad number(4),
+CONSTRAINT DETCES_PK PRIMARY KEY (numero_linea, ID_cesta),
+CONSTRAINT DETCES_ID_FK FOREIGN KEY (ID_cesta) REFERENCES CESTA (ID) on delete cascade
+);
+Create table PRODUCTOS (
+referencia varchar2(5) PRIMARY KEY,
+nombre varchar2(20),
+valor number(4,2),
+stock number(4),
+medida varchar2(5) check (medida in ('L','Kg','Ud')),
+fecha_caducidad date
+);
+
+Create table recogen (
+DNI_socio varchar2(9),
+ID_cesta varchar2(1),
+fecha_recogida date,
+CONSTRAINT RE_PK PRIMARY KEY (DNI_socio, ID_cesta, fecha_recogida),
+CONSTRAINT RE_DNISoc_FK FOREIGN KEY (DNI_socio) REFERENCES SOCIOS (DNI) on delete cascade,
+CONSTRAINT RE_IDCes_FK FOREIGN KEY (ID_cesta) REFERENCES CESTA (ID) on delete cascade
+);
+Create table preparan (
+DNI_voluntario varchar2(9),
+ID_cesta varchar2(1),
+fecha_preparacion date,
+hora_entrada timestamp,
+hora_salida timestamp,
+cantidad number(4),
+CONSTRAINT PRE_PK PRIMARY KEY (DNI_voluntario, ID_cesta, fecha_preparacion),
+CONSTRAINT PRE_DNIVol_FK FOREIGN KEY (DNI_voluntario) REFERENCES VOLUNTARIOS (DNI) on delete cascade,
+CONSTRAINT PRE_IDCes_FK FOREIGN KEY (ID_cesta) REFERENCES CESTA (ID) on delete cascade
+);
+Create table canjean (
+DNI_voluntario varchar2(9),
+Codigo_regalo varchar2(4),
+fecha_canjeo date,
+CONSTRAINT CA_PK PRIMARY KEY (DNI_voluntario, Codigo_regalo, fecha_canjeo),
+CONSTRAINT CA_DNIVol_FK FOREIGN KEY (DNI_voluntario) REFERENCES VOLUNTARIOS (DNI) on delete cascade,
+CONSTRAINT CA_CodReg_FK FOREIGN KEY (Codigo_regalo) REFERENCES REGALO (Codigo) on delete cascade
+);
+Create table contienen (
+ID_cesta varchar2(1),
+numero_linea number(3),
+ref_producto varchar2(5),
+CONSTRAINT CO_PK PRIMARY KEY (ID_cesta, numero_linea, ref_producto),
+CONSTRAINT CO_NumLIDCes_FK FOREIGN KEY (numero_linea, ID_cesta) REFERENCES DETALLE_CESTA (numero_linea, ID_cesta) on delete cascade,
+CONSTRAINT CO_refProd_FK FOREIGN KEY (ref_producto) REFERENCES PRODUCTOS (referencia) on delete cascade
+);
+
+Insert into SOCIOS values('31642798G', 'Paco', 'Cano Gutierrez','Calle Sabinar 8','617478552',TO_DATE('1987/01/31','YYYY/MM/DD'),600,6,'2');
+Insert into SOCIOS values('22447896V', 'Patricia', 'Fernandez Ruiz','Calle Japon 1','624752004',TO_DATE('1997/07/14','YYYY/MM/DD'),500,4,'3');
+Insert into SOCIOS values('74819253B', 'Dario', 'Ferrer Martinez','Calle Alemania 11','678451947',TO_DATE('2000/05/01','YYYY/MM/DD'),350,4,'2');
+Insert into SOCIOS values('55487914P', 'Lara', 'Martin Rubio','Calle Mandarina 7','642772771',TO_DATE('1995/09/12','YYYY/MM/DD'),400,5,'2');
+Insert into SOCIOS values('27445115T', 'Alex', 'Perez  Hernandez','Calle Segovia 8','643600501',TO_DATE('1999/12/04','YYYY/MM/DD'),600,6,'2');
+Insert into SOCIOS values('88544692S', 'Martirio', 'Batalla Salom','Calle Bilbao 2','666458123',TO_DATE('1957/01/31','YYYY/MM/DD'),100,3,'1');
+Insert into SOCIOS values('22951645V', 'Custodia', 'Guardiola Conesa','Avenida Juan Carlos 7','674184601',TO_DATE('1983/07/06','YYYY/MM/DD'),200,2,'2');
+Insert into SOCIOS values('27531479A', 'Isidro', 'Figueras Perez','Calle Limon 73','700284012',TO_DATE('1977/11/26','YYYY/MM/DD'),100,3,'1');
+Insert into SOCIOS values('77421335E', 'David', 'Gonzalez Azcona','Calle Madrid 17','634008222',TO_DATE('1998/10/25','YYYY/MM/DD'),500,7,'2');
+Insert into SOCIOS values('19311618X', 'Dimas', 'Cerdan Salinas','Calle Mares 14','792666320',TO_DATE('1989/03/29','YYYY/MM/DD'),300,3,'2');
+
+
+Insert into VOLUNTARIOS values('22447896V', 'Patricia', 'Fernandez Ruiz','Calle Japon 1','624752004',TO_DATE('1997/07/14','YYYY/MM/DD'),1500);
+Insert into VOLUNTARIOS values('77421335E', 'David', 'Gonzalez Azcona','Calle Madrid 17','634008222',TO_DATE('1998/10/25','YYYY/MM/DD'),400);
+Insert into VOLUNTARIOS values('10942404Y','Cosme','Nogueira Rebollo','Calle del Motor 33','605203665',TO_DATE('1973/06/16','YYYY/MM/DD'),650);
+Insert into VOLUNTARIOS values('40139191X','Francisca','Becerra Zapata','Calle de la Rosa 12','667884221', TO_DATE('1992/12/13','YYYY/MM/DD'),200);
+Insert into VOLUNTARIOS values('56497230K','Jose Luis','Arce Navarro','Calle Berlin 12','742851002',TO_DATE('1986/02/28','YYYY/MM/DD'),500);
+Insert into VOLUNTARIOS values('79512435F','Juan','Moreno Fernandez','Calle Salamanca 77','621325079',TO_DATE('1974/10/30','YYYY/MM/DD'),100);
+Insert into VOLUNTARIOS values('52413279I','Amaia','Valverde Lopez','Avenida Marco Polo 32','657035042',TO_DATE('1990/09/13','YYYY/MM/DD'),500);
+Insert into VOLUNTARIOS values('91471235B','Jesus','Cruz Cobo','Avenida Calvo Sotelo 27','649651036',TO_DATE('1995/04/27','YYYY/MM/DD'),800);
+Insert into VOLUNTARIOS values('55976143M','Maria Isabel','Beltran Lopez','Calle Perro 56','691023456',TO_DATE('1979/12/05','YYYY/MM/DD'),200);
+Insert into VOLUNTARIOS values('27445115T', 'Alex', 'Perez  Hernandez','Calle Segovia 8','643600501',TO_DATE('1999/12/04','YYYY/MM/DD'),1000);
+
+Insert into CESTA values('A', 58.85, 15);
+Insert into CESTA values('B', 51.30, 15);
+Insert into CESTA values('C', 78.70, 10);
+Insert into CESTA values('D', 40.95, 12);
+Insert into CESTA values('E', 41.50, 12);
+Insert into CESTA values('F', 30.65, 10);
+Insert into CESTA values('G', 17.50, 10);
+Insert into CESTA values('H', 47.20, 8);
+Insert into CESTA values('I', 21.00, 8);
+Insert into CESTA values('J', 17.20, 7);
+
+Insert into REGALO values ('0001','Pelicula','Vale para una entrada de cine',200);
+Insert into REGALO values ('0002','Cena','30% de descuento en Telepizza',100);
+Insert into REGALO values ('0003','Parque','Entrada gratuita al parque de atracciones Tivoli',900);
+Insert into REGALO values ('0004','Bolera','Partida de bolos para dos personas',500);
+Insert into REGALO values ('0005','Excursion','Visita guiada por las playas de Cabo de Gata',300);
+Insert into REGALO values ('0006','Mini Hollywood','Entrada al Mini Hollywood',800);
+Insert into REGALO values ('0007','Estetica','Limpieza facial',200);
+Insert into REGALO values ('0008','Peluqueria','Corte de pelo',400);
+Insert into REGALO values ('0009','Teatro','Entrada de teatro para dos personas',500);
+Insert into REGALO values ('0010','Naturaleza','Senderismo guiado por la sierra para dos personas',600);
+
+Insert into DETALLE_CESTA values(001, 'A', 10);
+Insert into DETALLE_CESTA values(003, 'A', 12);
+Insert into DETALLE_CESTA values(004, 'A', 11);
+Insert into DETALLE_CESTA values(002, 'A', 14);
+Insert into DETALLE_CESTA values(005, 'A', 10);
+
+Insert into DETALLE_CESTA values(001, 'B', 9);
+Insert into DETALLE_CESTA values(005, 'B', 9);
+Insert into DETALLE_CESTA values(002, 'B', 9);
+Insert into DETALLE_CESTA values(006, 'B', 9);
+Insert into DETALLE_CESTA values(009, 'B', 9);
+
+Insert into DETALLE_CESTA values(005, 'C', 8);
+Insert into DETALLE_CESTA values(009, 'C', 9);
+Insert into DETALLE_CESTA values(007, 'C', 9);
+Insert into DETALLE_CESTA values(010, 'C', 8);
+Insert into DETALLE_CESTA values(004, 'C', 9);
+
+Insert into DETALLE_CESTA values(001, 'D', 7);
+Insert into DETALLE_CESTA values(003, 'D', 8);
+Insert into DETALLE_CESTA values(005, 'D', 9);
+Insert into DETALLE_CESTA values(009, 'D', 7);
+Insert into DETALLE_CESTA values(002, 'D', 8);
+
+Insert into DETALLE_CESTA values(002, 'E', 6);
+Insert into DETALLE_CESTA values(001, 'E', 8);
+Insert into DETALLE_CESTA values(010, 'E', 6);
+Insert into DETALLE_CESTA values(005, 'E', 7);
+Insert into DETALLE_CESTA values(006, 'E', 8);
+
+Insert into DETALLE_CESTA values(001, 'F', 5);
+Insert into DETALLE_CESTA values(002, 'F', 6);
+Insert into DETALLE_CESTA values(003, 'F', 4);
+Insert into DETALLE_CESTA values(004, 'F', 5);
+Insert into DETALLE_CESTA values(006, 'F', 5);
+
+Insert into DETALLE_CESTA values(001, 'G', 4);
+Insert into DETALLE_CESTA values(002, 'G', 5);
+Insert into DETALLE_CESTA values(003, 'G', 3);
+Insert into DETALLE_CESTA values(004, 'G', 3);
+Insert into DETALLE_CESTA values(005, 'G', 3);
+
+Insert into DETALLE_CESTA values(007, 'H', 2);
+Insert into DETALLE_CESTA values(009, 'H', 4);
+Insert into DETALLE_CESTA values(010, 'H', 5);
+Insert into DETALLE_CESTA values(006, 'H', 10);
+Insert into DETALLE_CESTA values(002, 'H', 6);
+
+
+Insert into DETALLE_CESTA values(002, 'I', 3);
+Insert into DETALLE_CESTA values(004, 'I', 3);
+Insert into DETALLE_CESTA values(006, 'I', 3);
+Insert into DETALLE_CESTA values(008, 'I', 2);
+Insert into DETALLE_CESTA values(009, 'I', 2);
+
+Insert into DETALLE_CESTA values(002, 'J', 1);
+Insert into DETALLE_CESTA values(004, 'J', 1);
+Insert into DETALLE_CESTA values(006, 'J', 3);
+Insert into DETALLE_CESTA values(008, 'J', 2);
+Insert into DETALLE_CESTA values(009, 'J', 2);
+
+Insert into PRODUCTOS values('A0001','Pan',0.50,500,'Ud',TO_DATE ('2024/04/01', 'YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0002','Leche',0.85,200,'L',TO_DATE ('2025/01/01','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0003','Patatas',1.70,100,'Kg',TO_DATE ('2024/02/15','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0004','Azucar',1.05,100,'Kg',TO_DATE ('2023/09/11','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0005','Harina',1.00,300,'Kg',TO_DATE ('2024/04/01','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0006','Latas de conserva',2.20,100,'Ud',TO_DATE ('2024/12/31','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0007','Aceite Oliva',4.50,70,'L',TO_DATE ('2024/01/06','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0008','Aceite Girasol',3.20,80,'L',TO_DATE ('2023/11/11','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0009','Pasta',1.15,100,'Kg',TO_DATE ('2025/02/26','YYYY/MM/DD'));
+Insert into PRODUCTOS values('A0010','Arroz',1.30,200,'Kg',TO_DATE ('2024/07/22','YYYY/MM/DD'));
+
+Insert into recogen values ('22447896V','G',TO_DATE ('2022/10/10','YYYY/MM/DD'));
+Insert into recogen values ('19311618X','F',TO_DATE ('2023/01/25','YYYY/MM/DD'));
+Insert into recogen values ('27531479A','A',TO_DATE ('2022/03/05','YYYY/MM/DD'));
+Insert into recogen values ('31642798G','E',TO_DATE ('2022/11/21','YYYY/MM/DD'));
+Insert into recogen values ('77421335E','C',TO_DATE ('2022/09/04','YYYY/MM/DD'));
+Insert into recogen values ('27445115T','I',TO_DATE ('2022/07/17','YYYY/MM/DD'));
+Insert into recogen values ('55487914P','D',TO_DATE ('2022/12/21','YYYY/MM/DD'));
+Insert into recogen values ('74819253B','C',TO_DATE ('2023/02/16','YYYY/MM/DD'));
+Insert into recogen values ('27531479A','B',TO_DATE ('2022/03/25','YYYY/MM/DD'));
+Insert into recogen values ('22951645V','G',TO_DATE ('2023/01/10','YYYY/MM/DD'));
+Insert into recogen values ('27445115T','J',TO_DATE ('2022/03/15','YYYY/MM/DD'));
+Insert into recogen values ('55487914P','E',TO_DATE ('2022/03/07','YYYY/MM/DD'));
+Insert into recogen values ('22951645V','H',TO_DATE ('2023/03/03','YYYY/MM/DD'));
+
+Insert into preparan values ('10942404Y','A',TO_DATE ('2022/05/01','YYYY/MM/DD'), TO_DATE ('2022/05/01 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/05/01 14:00:00','YYYY/MM/DD hh24:mi:ss'),20);
+Insert into preparan values ('22447896V','B',TO_DATE ('2022/01/21','YYYY/MM/DD'), TO_DATE ('2022/01/21 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/01/21 21:00:00','YYYY/MM/DD hh24:mi:ss'),15);
+Insert into preparan values ('77421335E','C',TO_DATE ('2022/07/14','YYYY/MM/DD'), TO_DATE ('2022/07/14 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/07/14 21:00:00','YYYY/MM/DD hh24:mi:ss'),13);
+Insert into preparan values ('40139191X','D',TO_DATE ('2022/02/09','YYYY/MM/DD'), TO_DATE ('2022/02/09 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/02/09 14:00:00','YYYY/MM/DD hh24:mi:ss'),15);
+Insert into preparan values ('56497230K','E',TO_DATE ('2022/10/12','YYYY/MM/DD'), TO_DATE ('2022/10/12 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/10/12 21:00:00','YYYY/MM/DD hh24:mi:ss'),12);
+Insert into preparan values ('79512435F','G',TO_DATE ('2022/01/21','YYYY/MM/DD'), TO_DATE ('2022/01/21 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/01/21 14:00:00','YYYY/MM/DD hh24:mi:ss'),20);
+Insert into preparan values ('52413279I','F',TO_DATE ('2022/09/02','YYYY/MM/DD'), TO_DATE ('2022/09/02 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/09/02 14:00:00','YYYY/MM/DD hh24:mi:ss'),10);
+Insert into preparan values ('91471235B','H',TO_DATE ('2022/08/23','YYYY/MM/DD'), TO_DATE ('2022/08/23 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/08/23 21:00:00','YYYY/MM/DD hh24:mi:ss'),15);
+Insert into preparan values ('55976143M','I',TO_DATE ('2022/03/04','YYYY/MM/DD'), TO_DATE ('2022/03/04 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/03/04 14:00:00','YYYY/MM/DD hh24:mi:ss'),10);
+Insert into preparan values ('27445115T','J',TO_DATE ('2022/12/22','YYYY/MM/DD'), TO_DATE ('2022/12/22 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/12/22 14:00:00','YYYY/MM/DD hh24:mi:ss'),8);
+Insert into preparan values ('22447896V','C',TO_DATE ('2022/02/22','YYYY/MM/DD'), TO_DATE ('2022/02/22 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/02/22 21:00:00','YYYY/MM/DD hh24:mi:ss'),7);
+Insert into preparan values ('55976143M','A',TO_DATE ('2022/03/16','YYYY/MM/DD'), TO_DATE ('2022/03/16 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/03/16 14:00:00','YYYY/MM/DD hh24:mi:ss'),3);
+Insert into preparan values ('10942404Y','G',TO_DATE ('2022/03/02','YYYY/MM/DD'), TO_DATE ('2022/03/02 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2022/03/02 21:00:00','YYYY/MM/DD hh24:mi:ss'),15);
+Insert into preparan values ('22447896V','B',TO_DATE ('2023/05/01','YYYY/MM/DD'), TO_DATE ('2023/05/01 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2023/05/01 21:00:00','YYYY/MM/DD hh24:mi:ss'),7);
+Insert into preparan values ('22447896V','I',TO_DATE ('2023/05/01','YYYY/MM/DD'), TO_DATE ('2023/05/01 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2023/05/01 14:00:00','YYYY/MM/DD hh24:mi:ss'),8);
+Insert into preparan values ('79512435F','A',TO_DATE ('2023/05/01','YYYY/MM/DD'), TO_DATE ('2023/05/01 15:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2023/05/01 21:00:00','YYYY/MM/DD hh24:mi:ss'),10);
+Insert into preparan values ('91471235B','J',TO_DATE ('2023/05/01','YYYY/MM/DD'), TO_DATE ('2023/05/01 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2023/05/01 14:00:00','YYYY/MM/DD hh24:mi:ss'),6);
+Insert into preparan values ('55976143M','H',TO_DATE ('2023/03/01','YYYY/MM/DD'), TO_DATE ('2023/05/01 08:00:00','YYYY/MM/DD hh24:mi:ss'),TO_DATE ('2023/05/01 14:00:00','YYYY/MM/DD hh24:mi:ss'),5);
+
+
+
+Insert into canjean values ('27445115T','0002',TO_DATE ('2022/09/23','YYYY/MM/DD'));
+Insert into canjean values ('22447896V','0002',TO_DATE ('2022/07/15','YYYY/MM/DD'));
+Insert into canjean values ('79512435F','0003',TO_DATE ('2022/08/02','YYYY/MM/DD'));
+Insert into canjean values ('56497230K','0004',TO_DATE ('2023/02/21','YYYY/MM/DD'));
+Insert into canjean values ('55976143M','0010',TO_DATE ('2022/12/05','YYYY/MM/DD'));
+Insert into canjean values ('10942404Y','0001',TO_DATE ('2022/03/17','YYYY/MM/DD'));
+Insert into canjean values ('77421335E','0007',TO_DATE ('2022/05/09','YYYY/MM/DD'));
+Insert into canjean values ('40139191X','0009',TO_DATE ('2023/04/26','YYYY/MM/DD'));
+Insert into canjean values ('52413279I','0005',TO_DATE ('2022/06/12','YYYY/MM/DD'));
+Insert into canjean values ('91471235B','0008',TO_DATE ('2023/04/15','YYYY/MM/DD'));
+
+Insert into contienen values ('A',001,'A0001');
+Insert into contienen values ('A',003,'A0003');
+Insert into contienen values ('A',004,'A0004');
+Insert into contienen values ('A',002,'A0002');
+Insert into contienen values ('A',005,'A0005');
+
+Insert into contienen values ('B',001,'A0001');
+Insert into contienen values ('B',005,'A0005');
+Insert into contienen values ('B',002,'A0002');
+Insert into contienen values ('B',006,'A0006');
+Insert into contienen values ('B',009,'A0009');
+
+Insert into contienen values ('C',005,'A0005');
+Insert into contienen values ('C',009,'A0009');
+Insert into contienen values ('C',007,'A0007');
+Insert into contienen values ('C',010,'A0010');
+Insert into contienen values ('C',004,'A0004');
+
+Insert into contienen values ('D',001,'A0001');
+Insert into contienen values ('D',003,'A0003');
+Insert into contienen values ('D',005,'A0005');
+Insert into contienen values ('D',009,'A0009');
+Insert into contienen values ('D',002,'A0002');
+
+Insert into contienen values ('E',002,'A0002');
+Insert into contienen values ('E',001,'A0001');
+Insert into contienen values ('E',010,'A0010');
+Insert into contienen values ('E',005,'A0005');
+Insert into contienen values ('E',006,'A0006');
+
+Insert into contienen values ('F',001,'A0001');
+Insert into contienen values ('F',002,'A0002');
+Insert into contienen values ('F',003,'A0003');
+Insert into contienen values ('F',004,'A0004');
+Insert into contienen values ('F',006,'A0006');
+
+Insert into contienen values ('G',001,'A0001');
+Insert into contienen values ('G',002,'A0002');
+Insert into contienen values ('G',003,'A0003');
+Insert into contienen values ('G',004,'A0004');
+Insert into contienen values ('G',005,'A0005');
+
+Insert into contienen values ('H',007,'A0007');
+Insert into contienen values ('H',009,'A0009');
+Insert into contienen values ('H',010,'A0010');
+Insert into contienen values ('H',006,'A0006');
+Insert into contienen values ('H',002,'A0002');
+
+Insert into contienen values ('I',002,'A0002');
+Insert into contienen values ('I',004,'A0004');
+Insert into contienen values ('I',006,'A0006');
+Insert into contienen values ('I',008,'A0008');
+Insert into contienen values ('I',009,'A0009');
+
+Insert into contienen values ('J',002,'A0002');
+Insert into contienen values ('J',004,'A0004');
+Insert into contienen values ('J',006,'A0006');
+Insert into contienen values ('J',008,'A0008');
+Insert into contienen values ('J',009,'A0009');
+
+Create table SOCIOS_EN_RIESGO (
+DNI varchar2(9) PRIMARY KEY,
+nombre varchar2(20),
+apellidos varchar2(50),
+direccion varchar2(50),
+telefono varchar2(9),
+fecha_nacimiento date,
+ingresos number(4),
+cantidad_miembros_familia number(2),
+ayuda varchar2(5) check (ayuda in ('1','2','3')),
+cantidad_cestas_recibidas number(3)
+);
+
+Insert into SOCIOS_EN_RIESGO values('31642798G', 'Paco', 'Cano Gutierrez','Calle Sabinar 8','617478552',TO_DATE('1987/01/31','YYYY/MM/DD'),600,6,'2',1);
+Insert into SOCIOS_EN_RIESGO values('22447896V', 'Patricia', 'Fernandez Ruiz','Calle Japon 1','624752004',TO_DATE('1997/07/14','YYYY/MM/DD'),500,4,'3',1);
+Insert into SOCIOS_EN_RIESGO values('74819253B', 'Dario', 'Ferrer Martinez','Calle Alemania 11','678451947',TO_DATE('2000/05/01','YYYY/MM/DD'),350,4,'2',1);
+Insert into SOCIOS_EN_RIESGO values('55487914P', 'Lara', 'Martin Rubio','Calle Mandarina 7','642772771',TO_DATE('1995/09/12','YYYY/MM/DD'),400,5,'2',2);
+Insert into SOCIOS_EN_RIESGO values('27445115T', 'Alex', 'Perez  Hernandez','Calle Segovia 8','643600501',TO_DATE('1999/12/04','YYYY/MM/DD'),600,6,'2',2);
+Insert into SOCIOS_EN_RIESGO values('22951645V', 'Custodia', 'Guardiola Conesa','Avenida Juan Carlos 7','674184601',TO_DATE('1983/07/06','YYYY/MM/DD'),200,2,'2',2);
+Insert into SOCIOS_EN_RIESGO values('27531479A', 'Isidro', 'Figueras Perez','Calle Limon 73','700284012',TO_DATE('1977/11/26','YYYY/MM/DD'),100,3,'1',2);
+Insert into SOCIOS_EN_RIESGO values('77421335E', 'David', 'Gonzalez Azcona','Calle Madrid 17','634008222',TO_DATE('1998/10/25','YYYY/MM/DD'),500,7,'2',1);
+Insert into SOCIOS_EN_RIESGO values('19311618X', 'Dimas', 'Cerdan Salinas','Calle Mares 14','792666320',TO_DATE('1989/03/29','YYYY/MM/DD'),300,3,'2',1);

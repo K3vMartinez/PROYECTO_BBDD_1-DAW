@@ -1,0 +1,5 @@
+-- Cantidad de cestas entregadas a cada socio
+Select count(recogen.DNI_socio) as Cantidad, concat(socios.nombre,' ',socios.apellidos) as NombreCompleto
+from recogen, socios
+where recogen.DNI_socio = socios.DNI
+group by socios.DNI;

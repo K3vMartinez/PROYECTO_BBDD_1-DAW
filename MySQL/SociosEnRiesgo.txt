@@ -1,0 +1,16 @@
+-- Crear una tabla llamada SOCIOS_EN_RIESGO e insertar los datos de los socios y la cantidad de cestas que han recibido
+Create table SOCIOS_EN_RIESGO (
+DNI CHAR(9) PRIMARY KEY,
+nombre varchar(20),
+apellidos varchar(50),
+direccion varchar (50),
+telefono varchar(9),
+fecha_nacimiento date,
+ingresos int(4),
+cantidad_miembros_familia int(2),
+ayuda enum('1','2','3'),
+cantidad_cestas_recibidas int(3)
+);
+
+
+Insert into SOCIOS_EN_RIESGO Select SOCIOS.*, count(recogen.DNI_socio) as cantidadCestas from recogen,SOCIOS where recogen.DNI_socio = SOCIOS.DNI group by Socios.DNI;

@@ -1,0 +1,36 @@
+create or replace PROCEDURE ActualizacionAyuda (DNISocio VARCHAR2)
+AS 
+renta NUMBER(4);
+ingresosSocio NUMBER(4);
+familiaresSocio NUMBER(2);
+nombreSocio VARCHAR2(20);
+apellidosSocio VARCHAR2(50);
+ayudaAnterior VARCHAR2(5);
+ayudaActual VARCHAR2(5);
+BEGIN
+Select ingresos/CANTIDAD_MIEMBROS_FAMILIA into renta from socios where UPPER(DNI) = UPPER(DNISocio);
+Select nombre, apellidos, ingresos, cantidad_miembros_familia, ayuda into nombreSocio,apellidosSocio,ingresosSocio, familiaresSocio, ayudaAnterior
+from socios where UPPER(DNI) = UPPER(DNISocio);
+DBMS_OUTPUT.PUT_LINE('ACTUALIZACIÓN DE LA AYUDA');
+DBMS_OUTPUT.PUT_LINE('-----------------------------------');
+DBMS_OUTPUT.PUT_LINE('Socio: '|| nombreSocio || ' ' || apellidosSocio);
+DBMS_OUTPUT.PUT_LINE('DNI: '|| DNISocio);
+DBMS_OUTPUT.PUT_LINE('Ingresos: '|| ingresosSocio);
+DBMS_OUTPUT.PUT_LINE('Cantidad de familiares: '|| familiaresSocio);
+DBMS_OUTPUT.PUT_LINE('Tipo de ayuda anterior: '|| ayudaAnterior);
+
+IF (renta<=50) then
+UPDATE SOCIOS set ayuda = '1' where UPPER(DNI) = UPPER(DNISocio);
+UPDATE SOCIOS_EN_RIESGO set ayuda = '1' where UPPER(DNI) = UPPER(DNISocio);
+ELSIF (renta>50 and renta<=100) then
+UPDATE SOCIOS set ayuda = '2' where UPPER(DNI) = UPPER(DNISocio);
+UPDATE SOCIOS_EN_RIESGO set ayuda = '2' where UPPER(DNI) = UPPER(DNISocio);
+ELSE
+UPDATE SOCIOS set ayuda = '3' where UPPER(DNI) = UPPER(DNISocio);
+UPDATE SOCIOS_EN_RIESGO set ayuda = '3' where UPPER(DNI) = UPPER(DNISocio);
+END IF;
+Select ayuda into ayudaActual from socios where UPPER(DNI) = UPPER(DNISocio);
+DBMS_OUTPUT.PUT_LINE('ACTUALIZACIÓN DE LA AYUDA REALIZADA');
+DBMS_OUTPUT.PUT_LINE('-----------------------------------');
+DBMS_OUTPUT.PUT_LINE('Tipo de ayuda actual: '|| ayudaActual);
+END ActualizacionAyuda;

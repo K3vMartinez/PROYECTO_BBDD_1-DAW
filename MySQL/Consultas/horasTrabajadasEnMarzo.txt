@@ -1,0 +1,6 @@
+-- Listado con nombre, apellidos y fecha de preparacion y el número de  horas trabajadas durante el mes de marzo
+Select concat(voluntarios.nombre,' ',voluntarios.apellidos) as Voluntario, monthname(preparan.fecha_preparacion) as Mes, year(preparan.fecha_preparacion) as Año, 
+concat(sum(hour(timediff(preparan.hora_salida, preparan.hora_entrada))),' horas') as horasTrabajadas
+from voluntarios, preparan
+where voluntarios.DNI = preparan.DNI_voluntario and month(preparan.fecha_preparacion) = 3
+group by Voluntario, Año; 

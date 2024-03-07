@@ -1,0 +1,2 @@
+-- Datos de aquellas personas que son socios y  que alguna vez hayan sido o son voluntarios
+Select socios.* from socios, voluntarios where socios.DNI = voluntarios.DNI;

@@ -1,0 +1,84 @@
+CREATE DATABASE cestaSolidaria;
+Use cestaSolidaria;
+Create table SOCIOS (
+DNI CHAR(9) PRIMARY KEY,
+nombre varchar(20),
+apellidos varchar(50),
+direccion varchar (50),
+telefono varchar(9),
+fecha_nacimiento date,
+ingresos int(4),
+cantidad_miembros_familia int(2),
+ayuda enum('1','2','3')
+);
+Create table VOLUNTARIOS (
+DNI CHAR(9) PRIMARY KEY,
+nombre varchar(20),
+apellidos varchar(50),
+direccion varchar (50),
+telefono varchar(9),
+fecha_nacimiento date,
+puntos int(4)
+);
+Create table CESTA (
+ID char(1) PRIMARY KEY,
+valor_total float(4.2),
+stock int(4)
+);
+Create table REGALO (
+codigo varchar(4) PRIMARY KEY,
+nombre varchar(20),
+descripcion varchar(50),
+valor int(4)
+);
+Create table DETALLE_CESTA(
+PRIMARY KEY (numero_linea, ID_cesta),
+numero_linea int(3),
+ID_cesta char(1),
+cantidad int(4),
+FOREIGN KEY (ID_cesta) REFERENCES CESTA (ID) on delete cascade on update cascade
+);
+Create table PRODUCTOS (
+referencia varchar(5) PRIMARY KEY,
+nombre varchar(20),
+valor float(4.2),
+stock int(4),
+medida enum('L','Kg','Ud'),
+fecha_caducidad date
+);
+
+Create table recogen (
+PRIMARY KEY (DNI_socio, ID_cesta, fecha_recogida),
+DNI_socio varchar(9),
+ID_cesta char(1),
+fecha_recogida date,
+FOREIGN KEY (DNI_socio) REFERENCES SOCIOS (DNI) on delete cascade on update cascade,
+FOREIGN KEY (ID_cesta) REFERENCES CESTA (ID) on delete cascade on update cascade
+);
+Create table preparan (
+PRIMARY KEY (DNI_voluntario, ID_cesta, fecha_preparacion),
+DNI_voluntario varchar(9),
+ID_cesta char(1),
+fecha_preparacion date,
+hora_entrada datetime,
+hora_salida datetime,
+cantidad int(4),
+FOREIGN KEY (DNI_voluntario) REFERENCES VOLUNTARIOS (DNI) on delete cascade on update cascade,
+FOREIGN KEY (ID_cesta) REFERENCES CESTA (ID) on delete cascade on update cascade
+);
+Create table canjean (
+PRIMARY KEY (DNI_voluntario, Codigo_regalo, fecha_canjeo),
+DNI_voluntario varchar(9),
+Codigo_regalo varchar(4),
+fecha_canjeo date,
+FOREIGN KEY (DNI_voluntario) REFERENCES VOLUNTARIOS (DNI) on delete cascade on update cascade,
+FOREIGN KEY (Codigo_regalo) REFERENCES REGALO (Codigo) on delete cascade on update cascade
+);
+Create table contienen (
+PRIMARY KEY (ID_cesta, numero_linea, ref_producto),
+ID_cesta char(1),
+numero_linea int(3),
+ref_producto varchar(5),
+FOREIGN KEY (numero_linea, ID_cesta) REFERENCES DETALLE_CESTA (numero_linea, ID_cesta) on delete cascade on update cascade,
+FOREIGN KEY (ref_producto) REFERENCES PRODUCTOS (referencia) on delete cascade on update cascade
+);

@@ -1,0 +1,20 @@
+CREATE OR REPLACE PROCEDURE ACTUALIZACION_VALOR_CESTA (IDCesta VARCHAR2) 
+AS 
+valorAnterior NUMBER(5,2);
+valorActual NUMBER(5,2);
+BEGIN 
+Select valor_total into valorAnterior from CESTA where UPPER(ID) = UPPER(IDCesta);
+DBMS_OUTPUT.PUT_LINE('ACTUALIZACIÓN DEL VALOR DE LA CESTA');
+DBMS_OUTPUT.PUT_LINE('-----------------------------------');
+DBMS_OUTPUT.PUT_LINE('CESTA: '|| IDCesta);
+DBMS_OUTPUT.PUT_LINE('Valor anterior: '|| valorAnterior);
+UPDATE CESTA set CESTA.valor_total = 
+(Select sum(distinct PRODUCTOS.valor*DETALLE_CESTA.CANTIDAD) from PRODUCTOS, DETALLE_CESTA, contienen
+WHERE contienen.numero_linea = DETALLE_CESTA.numero_linea and PRODUCTOS.REFERENCIA = contienen.REF_PRODUCTO and DETALLE_CESTA.ID_cesta = UPPER(IDCesta)) 
+where UPPER(IDCesta) = ID;
+
+Select valor_total into valorActual from CESTA where UPPER(ID) = UPPER(IDCesta);
+DBMS_OUTPUT.PUT_LINE('Valor actual: '|| valorActual);
+
+
+END ACTUALIZACION_VALOR_CESTA;

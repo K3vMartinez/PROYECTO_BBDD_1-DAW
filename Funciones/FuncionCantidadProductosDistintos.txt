@@ -1,0 +1,7 @@
+CREATE OR REPLACE FUNCTION CANTIDADPRODUCTOSDISTINTOS (tipoCesta VARCHAR2)
+RETURN NUMBER AS 
+cantidadProductos NUMBER(4);
+BEGIN
+Select count(numero_linea) into cantidadProductos from detalle_cesta where UPPER(ID_cesta) = UPPER(tipoCesta);
+  RETURN cantidadProductos;
+END CANTIDADPRODUCTOSDISTINTOS;

@@ -1,0 +1,2 @@
+-- Borrar los socios que tengan un nivel de renta que superen a más de 500(de renta)
+DELETE from SOCIOS where (ingresos/cantidad_miembros_familia) >= 500;

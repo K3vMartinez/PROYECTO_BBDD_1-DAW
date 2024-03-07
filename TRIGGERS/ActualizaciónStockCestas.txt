@@ -1,0 +1,19 @@
+create or replace TRIGGER TRG_ACTUALIZACION_STOCK_CESTAS 
+BEFORE INSERT ON RECOGEN 
+FOR EACH ROW 
+DECLARE
+vStock NUMBER(4);
+Stock_negativo EXCEPTION;
+BEGIN
+Select Stock into vStock from CESTA where CESTA.ID = :new.ID_cesta;
+if vStock > 0 then
+UPDATE CESTA set Stock = Stock -1 where CESTA.ID = :new.ID_cesta;
+ELSE
+RAISE Stock_negativo;
+end if;
+EXCEPTION
+  WHEN Stock_negativo THEN 
+  RAISE_APPLICATION_ERROR(-20001, 'No quedan cestas del tipo seleccionado' );
+  WHEN OTHERS THEN
+  RAISE_APPLICATION_ERROR(-10001, 'Error en la auditoria');
+END TRG_ACTUALIZACION_STOCK_CESTAS;

@@ -1,0 +1,2 @@
+-- Datos de los socios que tienen tipo de ayuda 1
+Select * from socios where ayuda = '1';

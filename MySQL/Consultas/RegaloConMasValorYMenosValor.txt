@@ -1,0 +1,5 @@
+-- Obtener el nombre del regalo que tiene mas valor en puntos y el de menos valor en puntos (en la misma consulta)
+SELECT nombre, valor
+from REGALO
+where valor = (SELECT max(valor) from REGALO)
+or valor = (SELECT min(valor) from REGALO);

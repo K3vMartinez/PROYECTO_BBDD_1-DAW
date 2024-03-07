@@ -1,0 +1,3 @@
+-- Incrementar a los voluntarios que han trabajado el 1 de Mayo de 2023 en 5 los puntos 
+UPDATE VOLUNTARIOS inner join preparan ON (VOLUNTARIOS.DNI = preparan.DNI_voluntario) 
+set puntos = puntos+200 where preparan.fecha_preparacion = '2023-05-01';

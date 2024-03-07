@@ -1,0 +1,21 @@
+CREATE OR REPLACE TRIGGER TRG_ACTUALIZACION_PUNTOS 
+BEFORE INSERT ON CANJEAN
+FOR EACH ROW 
+DECLARE
+puntosVoluntario NUMBER(4);
+valorRegalo NUMBER(4);
+Puntos_negativo EXCEPTION;
+BEGIN
+Select puntos into puntosVoluntario from VOLUNTARIOS where DNI = :new.DNI_voluntario;
+Select valor into valorRegalo from REGALO where CODIGO = :new.CODIGO_REGALO;
+if puntosVoluntario-valorRegalo >= 0 then
+UPDATE VOLUNTARIOS SET Voluntarios.Puntos = Puntos - (Select valor from REGALO where CODIGO = :new.CODIGO_REGALO) where DNI = :new.DNI_voluntario;
+ELSE
+RAISE Puntos_negativo;
+end if;
+EXCEPTION
+  WHEN Puntos_negativo THEN 
+  RAISE_APPLICATION_ERROR(-20001, 'El voluntario no dispone de puntos suficientes para cangear el regalo' );
+  WHEN OTHERS THEN
+  RAISE_APPLICATION_ERROR(-10001, 'Error en la auditoria');
+END TRG_ACTUALIZACION_PUNTOS;

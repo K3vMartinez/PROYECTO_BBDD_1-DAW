@@ -1,0 +1,29 @@
+CREATE OR REPLACE PROCEDURE LISTADOCESTASENTREGADAS (DNISocio VARCHAR2)
+AS 
+CURSOR CCestas is
+Select ID_cesta, FECHA_RECOGIDA from recogen where UPPER(DNISocio) = UPPER(DNI_socio);
+
+cestas_entregadas  CCestas%rowtype;
+cantidadCestas NUMBER(4);
+nombreSocio VARCHAR2(20);
+apellidosSocio VARCHAR2(50);
+BEGIN
+Select nombre, apellidos into nombreSocio, apellidosSocio from SOCIOS where UPPER(DNISocio) = UPPER(DNI);
+DBMS_OUTPUT.PUT_LINE('DNI: '|| DNISocio);
+DBMS_OUTPUT.PUT_LINE('SOCIO: '|| nombreSocio||' '||apellidosSocio);
+DBMS_OUTPUT.PUT_LINE('CESTAS ENTREGADAS: ');
+DBMS_OUTPUT.PUT_LINE('------------------------------------------------------');
+DBMS_OUTPUT.PUT_LINE('Tipo Cesta           Fecha de recogida');
+DBMS_OUTPUT.PUT_LINE('------------------------------------------------------');
+
+Open CCestas;
+FETCH CCestas into cestas_entregadas;
+While CCestas%found loop
+DBMS_OUTPUT.PUT_LINE('   '||cestas_entregadas.ID_cesta||'                   '||cestas_entregadas.fecha_recogida);
+FETCH CCestas into cestas_entregadas;
+END LOOP;
+CLOSE CCestas;
+DBMS_OUTPUT.PUT_LINE('------------------------------------------------------');
+Select count(DNI_socio) into cantidadCestas from recogen where UPPER(DNISocio) = UPPER(DNI_socio);
+DBMS_OUTPUT.PUT_LINE('CANTIDAD TOTAL DE CESTAS ENTREGADAS:      '||cantidadCestas);
+END LISTADOCESTASENTREGADAS;
