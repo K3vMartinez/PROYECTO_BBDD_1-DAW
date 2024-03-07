@@ -10,3 +10,5 @@ Consiste en una cesta solidaria, la cual se puede conocer como un banco de alime
 
 
 Fue un proyecto pequeño que se realizó con mucho cariño. La experiencia del trabajo en equipo fue notablemente constructiva.
+
+Añadir que los documentos se realizaron a través de drive por lo que la conexión entre ellos se ejecuta correctamente en drive. Invito al que quiera saber con profundidad sobre este pequeño proyecto que lo descargue y lo pruebe. No es gran cosa pero para ser el primer año, considero que no está mal.
